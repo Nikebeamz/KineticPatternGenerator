@@ -23,7 +23,8 @@ public class KineticPatternGenerator {
         	Defines a JPanel with a specialized size routine
          */
 
-        buttonPanel = new JPanel(){@Override
+        buttonPanel = new JPanel(){
+            @Override
             public Dimension getPreferredSize() {
                 return new Dimension(500,100);
             }
@@ -49,16 +50,16 @@ public class KineticPatternGenerator {
         /*
             Adds the buttons to the frame
          */
+        ButtonGroup bg = new ButtonGroup();
         for(int i = 0; i<radioButtons.length; i++){
             JRadioButton temp = new JRadioButton(radioButtons[i]);
+            bg.add(temp);
             temp.addActionListener(new ActionListener(){
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(((JRadioButton)e.getSource()).isSelected()) //casts Object to RadioButton and checks state
                         lastClicked = e.getActionCommand();
-                    else
-                        lastClicked = "";
                 }
             }
             );
@@ -87,29 +88,11 @@ public class KineticPatternGenerator {
         drawKineticPattern();
     }
     
-    public static void main(String[] args){
-        new KineticPatternGenerator("Test  test test", new String[]{"t1", "t2",  "t3", "t5", "t6"});
-    }
-
-
     /*
         Specialize this method
      */
     public void drawKineticPattern(){
-        /*
-            Example implementation
-         */
-        while(true){
-            double t = (System.currentTimeMillis()/1000.0);
-            if(currentRadioButton() == "t1")
-                drawOval((int)((Math.cos(t)+1)*100), (int)((Math.sin(t)+1)*100), 100,100,true);
-            else
-                drawRectangle((int)((Math.cos(t)+1)*100), (int)((Math.sin(t)+1)*100), 100,100,true);
-            try {
-                Thread.sleep(drawingDelay());
-            } catch (InterruptedException ignored) {}
-
-        }
+       //...
     }
     
     public String currentRadioButton(){
@@ -117,11 +100,11 @@ public class KineticPatternGenerator {
     }
     
     public Color drawingColor(){
-        return Color.black;   
+        return Color.black;
     }
     
     public int drawingDelay(){
-        return 10;
+        return 1;
     }
     
     public int historyCount(){
