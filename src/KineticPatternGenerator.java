@@ -130,24 +130,25 @@ public class KineticPatternGenerator {
     }
 
     private void draw() {
+        long time = System.currentTimeMillis();
+            //ensure the queue is correctly sized
+            if (queue.size() > historyCount() && historyCount() > 0) {
+                queue.remove();
+            }
 
-        //ensure the queue is correctly sized
-        if(queue.size() > historyCount() && historyCount() > 0){
-            queue.remove();
-        }
+            Graphics2D g = image.createGraphics(); //creates a Graphics2D object from the BufferedImage
+            Color defaultColor = g.getColor();
+            g.fillRect(0, 0, 500, 500); //clear the scene
+            g.setColor(drawingColor());
 
-        Graphics2D g = image.createGraphics(); //creates a Graphics2D object from the BufferedImage
-        Color defaultColor = g.getColor();
-        g.fillRect(0,0,500,500); //clear the scene
-        g.setColor(drawingColor());
+            for (Shape shape : queue) { //for each shape in the queue
+                try {Thread.sleep(drawingDelay());} catch (InterruptedException e) {throw new RuntimeException(e);}
+                shape.draw(g); //call the specialized draw method
+            }
 
-        for (Shape shape : queue) { //for each shape in the queue
-            shape.draw(g); //call the specialized draw method
-        }
-
-        g.setColor(defaultColor);
-        g.dispose(); //disposes of the Graphics2D object for better performance
-        canvasPanel.repaint(); //repaints the canvas
+            g.setColor(defaultColor);
+            g.dispose(); //disposes of the Graphics2D object for better performance
+            canvasPanel.repaint(); //repaints the canvas
     }
 
     /*
