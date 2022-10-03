@@ -165,13 +165,14 @@ public class KineticPatternGenerator {
     interface Shape{
         public void draw(Graphics2D g);
         public String toString();
-
+        public Color getColor();
     }
 
     class Oval implements Shape{
 
         int x, y, width, height;
         boolean fill;
+        Color color;
 
 
         public Oval(int x, int y, int width, int height, boolean fill){
@@ -180,12 +181,18 @@ public class KineticPatternGenerator {
             this.width = width;
             this.height = height;
             this.fill = fill;
+            this.color = drawingColor();
         }
         public void draw(Graphics2D g){
             if(fill)
                 g.fillOval(x,y,width,height);
             else
                 g.drawOval(x,y,width,height);
+        }
+
+        @Override
+        public Color getColor() {
+            return color;
         }
 
         @Override
@@ -204,6 +211,7 @@ public class KineticPatternGenerator {
 
         int x, y, width, height;
         boolean fill;
+        Color color;
 
         public Rectangle(int x, int y, int width, int height, boolean fill){
             this.x = x;
@@ -211,12 +219,18 @@ public class KineticPatternGenerator {
             this.width = width;
             this.height = height;
             this.fill = fill;
+            this.color = drawingColor();
         }
         public void draw(Graphics2D g){
             if(fill)
                 g.fillRect(x,y,width,height);
             else
                 g.drawRect(x,y,width,height);
+        }
+
+        @Override
+        public Color getColor() {
+            return color;
         }
 
         @Override
@@ -233,16 +247,23 @@ public class KineticPatternGenerator {
 
     class Line implements Shape{
         int startX, startY, endX, endY;
+        Color color;
 
         public Line(int startX, int startY, int endX, int endY){
             this.startX = startX;
             this.startY = startY;
             this.endX = endX;
             this.endY = endY;
+            this.color = drawingColor();
         }
 
         public void draw(Graphics2D g){
             g.drawLine(startX, startY, endX, endY);
+        }
+
+        @Override
+        public Color getColor() {
+            return color;
         }
 
         @Override
