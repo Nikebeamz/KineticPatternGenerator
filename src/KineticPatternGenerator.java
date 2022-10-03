@@ -3,10 +3,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+
 
 public class KineticPatternGenerator {
     private JFrame frame;
@@ -66,6 +65,8 @@ public class KineticPatternGenerator {
             buttonPanel.add(temp);
         }
 
+        bg.setSelected(bg.getElements().nextElement().getModel(), true);
+
         /*
             Gets the panels to line up justified vertically
          */
@@ -87,7 +88,12 @@ public class KineticPatternGenerator {
 
         drawKineticPattern();
     }
-    
+
+
+    public static void main(String[] args){
+        var kine = new KineticPatternGenerator("Tester", new String[]{"A", "B", "C"});
+    }
+
     /*
         Specialize this method
      */
@@ -104,11 +110,11 @@ public class KineticPatternGenerator {
     }
     
     public int drawingDelay(){
-        return 1;
+        return 1000;
     }
     
     public int historyCount(){
-        return 1;
+        return 5;
     }
     
     public void drawLine(int startX, int startY, int endX, int endY){
@@ -125,12 +131,14 @@ public class KineticPatternGenerator {
         queue.add(new Oval(x,y,width,height,fill));
         draw();
     }
-    
+
     public void clear(){
+        queue.clear();
+        draw();
     }
 
     private void draw() {
-
+        try {Thread.sleep(drawingDelay());} catch (InterruptedException ignored) {}
         //ensure the queue is correctly sized
         if(queue.size() > historyCount() && historyCount() > 0){
             queue.remove();
@@ -156,12 +164,15 @@ public class KineticPatternGenerator {
 
     interface Shape{
         public void draw(Graphics2D g);
+        public String toString();
+
     }
 
     class Oval implements Shape{
 
         int x, y, width, height;
         boolean fill;
+
 
         public Oval(int x, int y, int width, int height, boolean fill){
         	this.x = x;
@@ -175,6 +186,17 @@ public class KineticPatternGenerator {
                 g.fillOval(x,y,width,height);
             else
                 g.drawOval(x,y,width,height);
+        }
+
+        @Override
+        public String toString() {
+            return "Oval{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    ", width=" + width +
+                    ", height=" + height +
+                    ", fill=" + fill +
+                    '}';
         }
     }
 
@@ -196,6 +218,17 @@ public class KineticPatternGenerator {
             else
                 g.drawRect(x,y,width,height);
         }
+
+        @Override
+        public String toString() {
+            return "Rectangle{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    ", width=" + width +
+                    ", height=" + height +
+                    ", fill=" + fill +
+                    '}';
+        }
     }
 
     class Line implements Shape{
@@ -210,6 +243,16 @@ public class KineticPatternGenerator {
 
         public void draw(Graphics2D g){
             g.drawLine(startX, startY, endX, endY);
+        }
+
+        @Override
+        public String toString() {
+            return "Line{" +
+                    "startX=" + startX +
+                    ", startY=" + startY +
+                    ", endX=" + endX +
+                    ", endY=" + endY +
+                    '}';
         }
     }
 
